@@ -298,7 +298,7 @@ open class Terminal {
     
     // You can ignore most of the defaults set here, the function
     // reset() will do that again
-    var sendFocus: Bool = false
+    public var sendFocus: Bool = false
     var cursorHidden : Bool = false
     
     /// Controls the origin mode (DECOM), when set, the screen is limited to the top and bottom margins
@@ -5039,6 +5039,24 @@ open class Terminal {
     public func sendMotion (buttonFlags: Int, x: Int, y: Int, pixelX: Int, pixelY: Int)
     {
         sendEvent(buttonFlags: buttonFlags+32, x: x, y: y, pixelX: pixelX, pixelY: pixelY)
+    }
+    
+    /**
+     * Sends a focus in event to the terminal if focus tracking is enabled
+     */
+    public func sendFocusIn() {
+        if sendFocus {
+            sendResponse(cc.CSI, "I")
+        }
+    }
+    
+    /**
+     * Sends a focus out event to the terminal if focus tracking is enabled
+     */
+    public func sendFocusOut() {
+        if sendFocus {
+            sendResponse(cc.CSI, "O")
+        }
     }
     
     static var matchColorCache : [Int:Int] = [:]
