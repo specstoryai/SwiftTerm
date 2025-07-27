@@ -467,6 +467,11 @@ open class TerminalView: NSView, NSTextInputClient, NSUserInterfaceValidations, 
         if response {
             hasFocus = true
             caretView.updateCursorStyle()
+            
+            // Send focus-in sequence if focus tracking is enabled
+            if terminal.sendFocus {
+                send(txt: "\u{1b}[I")
+            }
         }
         return response
     }
@@ -476,6 +481,11 @@ open class TerminalView: NSView, NSTextInputClient, NSUserInterfaceValidations, 
         if response {
             caretView.disableAnimations()
             hasFocus = false
+            
+            // Send focus-out sequence if focus tracking is enabled
+            if terminal.sendFocus {
+                send(txt: "\u{1b}[O")
+            }
         }
         return response
     }

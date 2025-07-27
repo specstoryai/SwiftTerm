@@ -1173,6 +1173,11 @@ open class TerminalView: UIScrollView, UITextInputTraits, UIKeyInput, UIScrollVi
         let response = super.becomeFirstResponder()
         if response {
             caretView?.updateCursorStyle()
+            
+            // Send focus-in sequence if focus tracking is enabled
+            if terminal.sendFocus {
+                send(txt: "\u{1b}[I")
+            }
         }
         return response
     }
@@ -1185,6 +1190,11 @@ open class TerminalView: UIScrollView, UITextInputTraits, UIKeyInput, UIScrollVi
             caretView?.updateView()
             keyRepeat?.invalidate()
             keyRepeat = nil
+            
+            // Send focus-out sequence if focus tracking is enabled
+            if terminal.sendFocus {
+                send(txt: "\u{1b}[O")
+            }
             
             terminalAccessory?.cancelTimer()
         }
